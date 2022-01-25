@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Candy Shop Online</title>
+    <link th:href="@{/css/style.css}" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<th:block th:include="/_user_info"></th:block>
+<a th:href="@{/my_orders}">MY ORDERS</a>
+<br/>
+<hr/>
+
+<h1>What would you like to choose?</h1>
+<form method="POST" th:object="${order.orderDetails}">
+    <div th:each="item, iter : *{orderItems}">
+        <img th:src="${'/images/products/' + item.product.name + '.png'}"
+             class="product" th:alt="${item.product.name}"/>
+        <input type="number" min="0" th:max="${item.product.inStock}"
+               th:field="*{orderItems[__${iter.index}__].quantity}" required>
+        <span th:if="${item.product.inStock == 0}" class="msg">Not available yet</span>
+        </br>
+        <span th:text="${item.product.name.toUpperCase()}"></span>
+        </br>
+        <span th:text="${item.product.getPriceForDisplay() + '$'}"></span>
+        </br></br>
+    </div>
+    <input type="image" th:src="@{/images/cart.png}" id="cart" alt="To the cart">
+</form>
+<th:block th:include="/_footer"></th:block>
+</body>
+</html>
